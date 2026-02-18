@@ -130,10 +130,12 @@ PLC3_DATA = {
 
 # Modbus: tags = (num_discrete_inputs, num_coils, num_input_registers, num_holding_registers).
 # Reals are stored in HR as scaled ints (value * MODBUS_SCALE).
+# Modbus TCP port (required in address for synch-client.py -i / -p parsing).
 MODBUS_SCALE = 1000
+MODBUS_PORT = 502
 
 # SPHINX_SWAT_TUTORIAL PLC1 UTILS(
-PLC1_ADDR = IP['plc1']
+PLC1_ADDR = IP['plc1'] + ':' + str(MODBUS_PORT)
 # PLC1 Modbus layout: CO 0=MV101, 1=P101, 2=MV201; HR 0=FIT101, 1=LIT101, 2=FIT201, 3=LIT301
 PLC1_TAGS = (0, 3, 0, 4)  # (DI, CO, IR, HR)
 PLC1_SERVER = {
@@ -152,7 +154,7 @@ PLC1_MODBUS = {
 }
 # SPHINX_SWAT_TUTORIAL PLC1 UTILS)
 
-PLC2_ADDR = IP['plc2']
+PLC2_ADDR = IP['plc2'] + ':' + str(MODBUS_PORT)
 # PLC2 Modbus layout: CO 0=MV201; HR 0=FIT201
 PLC2_TAGS = (0, 1, 0, 1)
 PLC2_SERVER = {
@@ -166,7 +168,7 @@ PLC2_PROTOCOL = {
 }
 PLC2_MODBUS = {'MV201': ('CO', 0), 'FIT201': ('HR', 0)}
 
-PLC3_ADDR = IP['plc3']
+PLC3_ADDR = IP['plc3'] + ':' + str(MODBUS_PORT)
 # PLC3 Modbus layout: HR 0=LIT301
 PLC3_TAGS = (0, 0, 0, 1)
 PLC3_SERVER = {
