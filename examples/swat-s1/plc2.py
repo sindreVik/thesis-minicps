@@ -5,7 +5,7 @@ swat-s1 plc2
 
 from minicps.devices import PLC
 from utils import PLC2_DATA, STATE, PLC2_PROTOCOL
-from utils import PLC_SAMPLES, PLC_PERIOD_SEC
+from utils import PLC_SAMPLES, PLC_PERIOD_SEC, MODBUS_SCALE
 from utils import IP
 
 import time
@@ -14,6 +14,7 @@ PLC1_ADDR = IP['plc1']
 PLC2_ADDR = IP['plc2']
 PLC3_ADDR = IP['plc3']
 
+# Modbus: PLC2 exposes FIT201 at HR 0
 FIT201_2 = ('FIT201', 2)
 
 
@@ -28,7 +29,7 @@ class SwatPLC2(PLC):
         """plc2 main loop.
 
             - read flow level sensors #2
-            - update interal enip server
+            - update internal modbus server
         """
 
         print('DEBUG: swat-s1 plc2 enters main_loop.')
@@ -39,7 +40,7 @@ class SwatPLC2(PLC):
             fit201 = float(self.get(FIT201_2))
             print("DEBUG PLC2 - get fit201: %f" % fit201)
 
-            self.send(FIT201_2, fit201, PLC2_ADDR)
+            self.send(('HR', 0), int(round(fit201 * MODBUS_SCALE)), PLC2_ADDR)
             # fit201 = self.receive(FIT201_2, PLC2_ADDR)
             # print("DEBUG PLC2 - receive fit201: ", fit201)
 

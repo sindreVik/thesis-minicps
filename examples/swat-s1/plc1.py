@@ -4,7 +4,7 @@ swat-s1 plc1.py
 
 from minicps.devices import PLC
 from utils import PLC1_DATA, STATE, PLC1_PROTOCOL
-from utils import PLC_PERIOD_SEC, PLC_SAMPLES
+from utils import PLC_PERIOD_SEC, PLC_SAMPLES, MODBUS_SCALE
 from utils import IP, LIT_101_M, LIT_301_M, FIT_201_THRESH
 
 import time
@@ -50,7 +50,7 @@ class SwatPLC1(PLC):
             # lit101 [meters]
             lit101 = float(self.get(LIT101))
             print('DEBUG plc1 lit101: %.5f' % lit101)
-            self.send(LIT101, lit101, PLC1_ADDR)
+            self.send(('HR', 1), int(round(lit101 * MODBUS_SCALE)), PLC1_ADDR)
 
             if lit101 >= LIT_101_M['HH']:
                 print("WARNING PLC1 - lit101 over HH: %.2f >= %.2f." % (
@@ -60,7 +60,7 @@ class SwatPLC1(PLC):
                 # CLOSE mv101
                 print("INFO PLC1 - lit101 over H -> close mv101.")
                 self.set(MV101, 0)
-                self.send(MV101, 0, PLC1_ADDR)
+                self.send(('CO', 0), False, PLC1_ADDR)
 
             elif lit101 <= LIT_101_M['LL']:
                 print("WARNING PLC1 - lit101 under LL: %.2f <= %.2f." % (
@@ -69,24 +69,25 @@ class SwatPLC1(PLC):
                 # CLOSE p101
                 print("INFO PLC1 - close p101.")
                 self.set(P101, 0)
-                self.send(P101, 0, PLC1_ADDR)
+                self.send(('CO', 1), False, PLC1_ADDR)
 
             elif lit101 <= LIT_101_M['L']:
                 # OPEN mv101
                 print("INFO PLC1 - lit101 under L -> open mv101.")
                 self.set(MV101, 1)
-                self.send(MV101, 1, PLC1_ADDR)
+                self.send(('CO', 0), True, PLC1_ADDR)
 
-            # TODO: use it when implement raw water tank
-            # read from PLC2 (constant value)
-            fit201 = float(self.receive(FIT201_2, PLC2_ADDR))
+            # read from PLC2 (Modbus HR 0 = FIT201)
+            fit201_raw = self.receive(('HR', 0), PLC2_ADDR)
+            fit201 = float(fit201_raw) / MODBUS_SCALE
             print("DEBUG PLC1 - receive fit201: %f" % fit201)
-            self.send(FIT201_1, fit201, PLC1_ADDR)
+            self.send(('HR', 2), int(round(fit201 * MODBUS_SCALE)), PLC1_ADDR)
 
-            # # read from PLC3
-            lit301 = float(self.receive(LIT301_3, PLC3_ADDR))
+            # read from PLC3 (Modbus HR 0 = LIT301)
+            lit301_raw = self.receive(('HR', 0), PLC3_ADDR)
+            lit301 = float(lit301_raw) / MODBUS_SCALE
             print("DEBUG PLC1 - receive lit301: %f" % lit301)
-            self.send(LIT301_1, lit301, PLC1_ADDR)
+            self.send(('HR', 3), int(round(lit301 * MODBUS_SCALE)), PLC1_ADDR)
 
             #if fit201 > FIT_201_THRESH or lit301 >= LIT_301_M['H']:
             #    # CLOSE p101

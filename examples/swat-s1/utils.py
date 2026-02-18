@@ -1,8 +1,8 @@
 """
 swat-s1 utils.py
 
-sqlite and enip use name (string) and pid (int) has key and the state stores
-values as strings.
+sqlite and modbus use name (string) and pid (int) as key and the state stores
+values as strings. Modbus send/receive use (type, offset) with types CO/DI/HR/IR.
 
 Actuator tags are redundant, we will use only the XXX_XXX_OPEN tag ignoring
 the XXX_XXX_CLOSE with the following convention:
@@ -128,59 +128,57 @@ PLC3_DATA = {
 }
 
 
+# Modbus: tags = (num_discrete_inputs, num_coils, num_input_registers, num_holding_registers).
+# Reals are stored in HR as scaled ints (value * MODBUS_SCALE).
+MODBUS_SCALE = 1000
+
 # SPHINX_SWAT_TUTORIAL PLC1 UTILS(
 PLC1_ADDR = IP['plc1']
-PLC1_TAGS = (
-    ('FIT101', 1, 'REAL'),
-    ('MV101', 1, 'INT'),
-    ('LIT101', 1, 'REAL'),
-    ('P101', 1, 'INT'),
-    # interlocks does NOT go to the statedb
-    ('FIT201', 1, 'REAL'),
-    ('MV201', 1, 'INT'),
-    ('LIT301', 1, 'REAL'),
-)
+# PLC1 Modbus layout: CO 0=MV101, 1=P101, 2=MV201; HR 0=FIT101, 1=LIT101, 2=FIT201, 3=LIT301
+PLC1_TAGS = (0, 3, 0, 4)  # (DI, CO, IR, HR)
 PLC1_SERVER = {
     'address': PLC1_ADDR,
     'tags': PLC1_TAGS
 }
 PLC1_PROTOCOL = {
-    'name': 'enip',
+    'name': 'modbus',
     'mode': 1,
     'server': PLC1_SERVER
+}
+# Modbus (type, offset) for PLC1 send/receive
+PLC1_MODBUS = {
+    'MV101': ('CO', 0), 'P101': ('CO', 1), 'MV201': ('CO', 2),
+    'FIT101': ('HR', 0), 'LIT101': ('HR', 1), 'FIT201': ('HR', 2), 'LIT301': ('HR', 3),
 }
 # SPHINX_SWAT_TUTORIAL PLC1 UTILS)
 
 PLC2_ADDR = IP['plc2']
-PLC2_TAGS = (
-    ('FIT201', 2, 'REAL'),
-    ('MV201', 2, 'INT'),
-    # no interlocks
-)
+# PLC2 Modbus layout: CO 0=MV201; HR 0=FIT201
+PLC2_TAGS = (0, 1, 0, 1)
 PLC2_SERVER = {
     'address': PLC2_ADDR,
     'tags': PLC2_TAGS
 }
 PLC2_PROTOCOL = {
-    'name': 'enip',
+    'name': 'modbus',
     'mode': 1,
     'server': PLC2_SERVER
 }
+PLC2_MODBUS = {'MV201': ('CO', 0), 'FIT201': ('HR', 0)}
 
 PLC3_ADDR = IP['plc3']
-PLC3_TAGS = (
-    ('LIT301', 3, 'REAL'),
-    # no interlocks
-)
+# PLC3 Modbus layout: HR 0=LIT301
+PLC3_TAGS = (0, 0, 0, 1)
 PLC3_SERVER = {
     'address': PLC3_ADDR,
     'tags': PLC3_TAGS
 }
 PLC3_PROTOCOL = {
-    'name': 'enip',
+    'name': 'modbus',
     'mode': 1,
     'server': PLC3_SERVER
 }
+PLC3_MODBUS = {'LIT301': ('HR', 0)}
 
 # state {{{1
 # SPHINX_SWAT_TUTORIAL STATE(

@@ -5,7 +5,7 @@ swat-s1 plc3
 
 from minicps.devices import PLC
 from utils import PLC3_DATA, STATE, PLC3_PROTOCOL
-from utils import PLC_SAMPLES, PLC_PERIOD_SEC
+from utils import PLC_SAMPLES, PLC_PERIOD_SEC, MODBUS_SCALE
 from utils import IP
 
 import time
@@ -14,6 +14,7 @@ PLC1_ADDR = IP['plc1']
 PLC2_ADDR = IP['plc2']
 PLC3_ADDR = IP['plc3']
 
+# Modbus: PLC3 exposes LIT301 at HR 0
 LIT301_3 = ('LIT301', 3)
 
 
@@ -28,7 +29,7 @@ class SwatPLC3(PLC):
         """plc3 main loop.
 
             - read UF tank level from the sensor
-            - update internal enip server
+            - update internal modbus server
         """
 
         print('DEBUG: swat-s1 plc3 enters main_loop.')
@@ -39,7 +40,7 @@ class SwatPLC3(PLC):
             lit301 = float(self.get(LIT301_3))
             print("DEBUG PLC3 - get lit301: %f" % lit301)
 
-            self.send(LIT301_3, lit301, PLC3_ADDR)
+            self.send(('HR', 0), int(round(lit301 * MODBUS_SCALE)), PLC3_ADDR)
 
             time.sleep(PLC_PERIOD_SEC)
             count += 1
