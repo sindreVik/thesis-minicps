@@ -5,13 +5,10 @@ swat-s1 plc1.py
 from minicps.devices import PLC
 from utils import PLC1_DATA, STATE, PLC1_PROTOCOL
 from utils import PLC_PERIOD_SEC, PLC_SAMPLES, MODBUS_SCALE
-from utils import IP, LIT_101_M, LIT_301_M, FIT_201_THRESH
+from utils import PLC1_ADDR, PLC2_ADDR, PLC3_ADDR
+from utils import LIT_101_M, LIT_301_M, FIT_201_THRESH
 
 import time
-
-PLC1_ADDR = IP['plc1']
-PLC2_ADDR = IP['plc2']
-PLC3_ADDR = IP['plc3']
 
 FIT101 = ('FIT101', 1)
 MV101 = ('MV101', 1)

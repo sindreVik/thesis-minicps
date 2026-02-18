@@ -6,13 +6,9 @@ swat-s1 plc2
 from minicps.devices import PLC
 from utils import PLC2_DATA, STATE, PLC2_PROTOCOL
 from utils import PLC_SAMPLES, PLC_PERIOD_SEC, MODBUS_SCALE
-from utils import IP
+from utils import PLC2_ADDR
 
 import time
-
-PLC1_ADDR = IP['plc1']
-PLC2_ADDR = IP['plc2']
-PLC3_ADDR = IP['plc3']
 
 # Modbus: PLC2 exposes FIT201 at HR 0
 FIT201_2 = ('FIT201', 2)
