@@ -79,12 +79,16 @@ class SwatPLC1(PLC):
 
             # read from PLC2 (Modbus HR 0 = FIT201)
             fit201_raw = self.receive(('HR', 0), PLC2_ADDR)
+            if fit201_raw is None:
+                raise RuntimeError('Modbus receive FIT201 from PLC2 failed; ensure PLC2 is running and address is ip:502 (e.g. 192.168.1.20:502)')
             fit201 = float(fit201_raw) / MODBUS_SCALE
             print("DEBUG PLC1 - receive fit201: %f" % fit201)
             self.send(('HR', 2), int(round(fit201 * MODBUS_SCALE)), PLC1_ADDR)
 
             # read from PLC3 (Modbus HR 0 = LIT301)
             lit301_raw = self.receive(('HR', 0), PLC3_ADDR)
+            if lit301_raw is None:
+                raise RuntimeError('Modbus receive LIT301 from PLC3 failed; ensure PLC3 is running and address is ip:502 (e.g. 192.168.1.30:502)')
             lit301 = float(lit301_raw) / MODBUS_SCALE
             print("DEBUG PLC1 - receive lit301: %f" % lit301)
             self.send(('HR', 3), int(round(lit301 * MODBUS_SCALE)), PLC1_ADDR)
