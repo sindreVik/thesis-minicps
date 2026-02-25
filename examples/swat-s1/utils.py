@@ -131,7 +131,7 @@ PLC3_DATA = {
 # Modbus: tags = (num_discrete_inputs, num_coils, num_input_registers, num_holding_registers).
 # Reals are stored in HR as scaled ints (value * MODBUS_SCALE).
 # Modbus TCP port (required in address for synch-client.py -i / -p parsing).
-MODBUS_SCALE = 1000
+MODBUS_SCALE = 1
 MODBUS_PORT = 502
 
 # SPHINX_SWAT_TUTORIAL PLC1 UTILS(

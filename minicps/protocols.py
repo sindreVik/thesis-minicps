@@ -740,8 +740,7 @@ class ModbusProtocol(Protocol):
         :value: sent
         :address: ip[:port], not validated
         """
-        if address.find(':') == -1:
-            address = address + ModbusProtocol._TCP_PORT
+       
         colon_index = address.find(':')
         IP = '-i {} '.format(address[:colon_index])
         PORT = '-p {} '.format(address[colon_index+1:])
@@ -829,8 +828,8 @@ class ModbusProtocol(Protocol):
 
         :returns: read value(s)
         """
-        if address.find(':') == -1:
-            address = address + ModbusProtocol._TCP_PORT
+
+        
         colon_index = address.find(':')
         IP = '-i {} '.format(address[:colon_index])
         PORT = '-p {} '.format(address[colon_index+1:])
