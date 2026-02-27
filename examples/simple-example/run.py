@@ -26,8 +26,8 @@ class SimpleCPS(MiniCPS):
 
         # start PLC processes
         plc1, plc2 = self.net.get('plc1', 'plc2')
-        plc1.cmd(sys.executable + ' plc1.py &')
-        plc2.cmd(sys.executable + ' plc2.py &')
+        plc1.cmd(sys.executable + ' plc1.py &> logs/plc1.log &')
+        plc2.cmd(sys.executable + ' plc2.py &> logs/plc2.log &')
 
         CLI(self.net)
 

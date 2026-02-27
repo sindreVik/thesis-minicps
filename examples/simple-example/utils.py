@@ -29,7 +29,7 @@ NETMASK = '/24'
 
 # protocol
 # tags tuple is (num_discrete_inputs, num_coils, num_input_registers, num_holding_registers)
-PLC1_TAGS = (0, 0, 0, 1)  # expose a single holding register from plc1
+PLC1_TAGS = (1, 1, 1, 1)  # expose a single holding register from plc1
 PLC1_SERVER = {
     'address': PLC1_ADDR,
     'tags': PLC1_TAGS,
@@ -41,7 +41,7 @@ PLC1_PROTOCOL = {
 }
 
 # plc2 only acts as a modbus client in this example
-PLC2_TAGS = (0, 0, 0, 0)
+PLC2_TAGS = (1, 1, 1, 1)
 PLC2_SERVER = {
     'address': PLC2_ADDR,
     'tags': PLC2_TAGS,

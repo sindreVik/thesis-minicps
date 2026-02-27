@@ -68,6 +68,7 @@ if __name__ == "__main__":
         if args.type == 'HR':
             if args.count == 1:
                 hr_write = client.write_register(args.offset, args.register[0])
+                print(f"Modbus Error: {hr_write}")
                 assert(hr_write.function_code < 0x80)
             else:
                 hrs_write = client.write_registers(args.offset, args.register)

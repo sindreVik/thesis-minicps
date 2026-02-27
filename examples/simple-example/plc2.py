@@ -24,7 +24,7 @@ class SimplePLC2(PLC):
         print('simple-example: plc2 pre_loop')
         time.sleep(sleep)
 
-    def main_loop(self, sleep=1.0):
+    def main_loop(self, sleep=3.0):
         print('simple-example: plc2 main_loop')
 
         while True:

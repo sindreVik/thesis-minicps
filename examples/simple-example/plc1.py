@@ -24,7 +24,7 @@ class SimplePLC1(PLC):
         print('simple-example: plc1 pre_loop')
         time.sleep(sleep)
 
-    def main_loop(self, sleep=1.0):
+    def main_loop(self, sleep=3.0):
         print('simple-example: plc1 main_loop')
         value = 0
 
